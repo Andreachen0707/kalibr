@@ -17,10 +17,6 @@ import csv
 # dataset/imu.csv
 
 #setup the argument list
-GYRO_SCALE_FACTOR = 1.0 / 262.0
-ACCEL_SCALE_FACTOR = 1.0 / 8192.0
-GRAVITY = 9.8065
-
 parser = argparse.ArgumentParser(description='Create a ROS bag using the images and imu data.')
 parser.add_argument('--folder',  metavar='folder', nargs='?', help='Data folder')
 parser.add_argument('--output-bag', metavar='output_bag',  default="output.bag", help='ROS bag file %(default)s')
@@ -93,12 +89,12 @@ def createImuMessge(timestamp_int, omega, alpha, imu_name):
     rosimu = Imu()
     rosimu.header.stamp = timestamp
     rosimu.header.frame_id = imu_name
-    rosimu.angular_velocity.x = float(omega[0]) * np.pi / 180.0 * GYRO_SCALE_FACTOR
-    rosimu.angular_velocity.y = float(omega[1]) * np.pi / 180.0 * GYRO_SCALE_FACTOR
-    rosimu.angular_velocity.z = float(omega[2]) * np.pi / 180.0 * GYRO_SCALE_FACTOR
-    rosimu.linear_acceleration.x = float(alpha[0]) * GRAVITY * ACCEL_SCALE_FACTOR
-    rosimu.linear_acceleration.y = float(alpha[1]) * GRAVITY * ACCEL_SCALE_FACTOR
-    rosimu.linear_acceleration.z = float(alpha[2]) * GRAVITY * ACCEL_SCALE_FACTOR
+    rosimu.angular_velocity.x = float(omega[0])
+    rosimu.angular_velocity.y = float(omega[1])
+    rosimu.angular_velocity.z = float(omega[2])
+    rosimu.linear_acceleration.x = float(alpha[0])
+    rosimu.linear_acceleration.y = float(alpha[1])
+    rosimu.linear_acceleration.z = float(alpha[2])
     
     return rosimu, timestamp
     

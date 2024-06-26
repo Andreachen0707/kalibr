@@ -7,21 +7,22 @@
 #       - <timestamp3>.png
 #   - imu.csv
 
-# create data bag
-kalibr_bagcreater --folder dataset-dir/. --output-bag databag.bag
-
 # within docker, run ros related
 source devel/setup.bash
+
+rosrun kalibr kalibr_create_target_pdf --type apriltag --nx 6 --ny 6 --tsize 0.0589 --tspace 0.3
+
+rosrun kalibr kalibr_bagcreater --folder /data --output-bag /data/data.bag
+
 rosrun kalibr kalibr_calibrate_cameras \
- 	--target april_6x6.yaml \
+ 	--target /config/target.yaml \
  	--models pinhole-radtan \
  	--topics /cam0/image_raw \
- 	--bag cam_april.bag \
- 	--bag-freq 10.0
+ 	--bag /data/data.bag
 
 rosrun kalibr kalibr_calibrate_imu_camera \
-	--target april_6x6.yaml \
-	--imu imu_adis16448.yaml \
+	--target /config/target.yaml \
+	--imu /config/imu.yaml \
 	--imu-models calibrated \
-	--cam cam_april-camchain.yaml \
-	--bag imu_april.bag
+	--cam /data/data-camchain.yaml \
+	--bag /data/data.bag
